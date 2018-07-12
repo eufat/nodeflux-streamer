@@ -1,0 +1,23 @@
+{
+    "extends": ["eslint:recommended", "google"],
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "rules": {
+        "require-jsdoc": "off",
+        "new-cap": [
+            2,
+            {
+                "capIsNewExceptionPattern": "Mixin$"
+            }
+        ],
+        "max-len": ["error", { "code": 320 }]
+    }
+}
