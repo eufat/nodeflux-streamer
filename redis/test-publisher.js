@@ -2,9 +2,25 @@ const redis = require("redis");
 const sub = redis.createClient();
 const pub = redis.createClient();
 
+console.log("Waiting for subscriber ...");
+
 sub.on("subscribe", function(channel, count) {
-    let i = 0;
-    while (i < 10) {
-        pub.publish("redis_frames", "Some message.");
-    }
+    console.log("Subscriber connected: ", channel);
+    setInterval(() => {
+        const message = "Some message.";
+        console.log("sending: ", message);
+        pub.publish("redis_frames", message);
+    }, 1000);
+});
+
+let iterator = 1;
+setInterval(() => {
+    const message = `message #${iterator}.`;
+    console.log("sending: ", message);
+    pub.publish("redis_frames", message);
+    iterator++;
+}, 1000);
+
+sub.on("error", err => {
+    console.log("Error " + err);
 });

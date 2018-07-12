@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Socket.IO Consume</title>
+    <style>
+        body {
+            width: 100%;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        .grid {
+            display: inline-block;
+            width: 40%;
+            min-height: 50vh;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="status">Not available</div>
+    <div class="grid">
+        <p>Redis Streamer Client</p>
+        <ul id="redis-messages"></ul>
+    </div>
+    <div class="grid">
+        <p>RabbitMQ Streamer Client</p>
+        <ul id="rabbitmq-messages"></ul>
+    </div>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(() => {
+            const socket = io('http://localhost:3000');
+            socket.on('connect', function () {
+                $('#status').text('Connected')
+            })
+
+            socket.on('redis_frames', function (msg) {
+                console.log(msg);
+                $('#redis-messages').append($('<li>').text(msg));
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+
+            socket.on('rabbitmq_frames', function (msg) {
+                $('#rabbitmq-messages').append($('<li>').text(msg));
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+        });
+    </script>
+</body>
+
+</html>
