@@ -1,29 +1,33 @@
 const amqp = require("amqplib/callback_api");
-const app = require("express")();
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
-const redis = require("redis");
-const client = redis.createClient();
+const WebSocket = require("ws");
+
+const wss = new WebSocket.Server({
+    port: 8080
+});
 
 amqp.connect(
-    "amqp://localhost",
+    "amqp://52.221.238.228:7002",
     (err, conn) => {
-        conn.createChannel((err, ch) => {
-            const q = "frames";
+        wss.on("connection", function connection(ws) {
+            console.log("Connected with client.");
 
-            ch.assertQueue(q, { durable: false });
+            conn.createChannel((err, ch) => {
+                const q = "processed_img";
+                ch.assertQueue(q, { durable: false });
 
-            ch.consume(
-                q,
-                msg => {
-                    const message = msg.content.toString();
+                let i = 0;
+                ch.consume(
+                    q,
+                    msg => {
+                        const message = msg.content.toString();
 
-                    io.on("connection", socket => {
-                        socket.emit("rabbitmq_frames", { message });
-                    });
-                },
-                { noAck: true }
-            );
+                        ws.send(message);
+
+                        i++;
+                    },
+                    { noAck: true }
+                );
+            });
         });
     }
 );
