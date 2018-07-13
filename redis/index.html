@@ -4,50 +4,68 @@
 <head>
     <title>Socket.IO Consume</title>
     <style>
-        body {
+        .container {
             width: 100%;
             padding: 0;
             font-family: sans-serif;
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
         }
 
         .grid {
-            display: inline-block;
-            width: 40%;
-            min-height: 50vh;
-            border: 1px solid black;
+            width: -webkit-calc(50% - 2px);
+            border-right: 1px solid black;
+            min-height: 600px;
+            background-color: white;
         }
     </style>
 </head>
 
 <body>
     <div id="status">Not available</div>
-    <div class="grid">
-        <p>Redis Streamer Client</p>
-        <ul id="redis-messages"></ul>
-    </div>
-    <div class="grid">
-        <p>RabbitMQ Streamer Client</p>
-        <ul id="rabbitmq-messages"></ul>
+    <div class="container">
+        <div class="grid">
+            <p>Redis Streamer Client</p>
+            <img id="img" />
+            <!-- <ul id="redis-messages"></ul> -->
+        </div>
+        <div class="grid">
+            <p>RabbitMQ Streamer Client</p>
+            <ul id="rabbitmq-messages"></ul>
+        </div>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
         $(() => {
-            const socket = io('http://localhost:3000');
-            socket.on('connect', function () {
-                $('#status').text('Connected')
-            })
+            const socket = new WebSocket('ws://localhost:8080');
+            const frameImage = document.querySelector('#img');
 
-            socket.on('redis_frames', function (msg) {
-                console.log(msg);
-                $('#redis-messages').append($('<li>').text(msg));
-                window.scrollTo(0, document.body.scrollHeight);
+            // Connection opened
+            socket.addEventListener('open', function (event) {
+                $('#status').text('Connected')
             });
 
+            // Listen for messages
+            socket.addEventListener('message', function (event) {
+                const msg = event.data;
+
+                // console.log(atob(msg));
+                // console.log(msg);
+                const image = 'data:image/jpeg;base64,' + msg;
+                // console.log(image);
+                frameImage.src = image;
+                // $('#redis-messages').append($('<li>').text(msg));
+                // window.scrollTo(0, document.body.scrol   lHeight);
+            });
+
+            /*
             socket.on('rabbitmq_frames', function (msg) {
                 $('#rabbitmq-messages').append($('<li>').text(msg));
                 window.scrollTo(0, document.body.scrollHeight);
             });
+            */
         });
     </script>
 </body>
