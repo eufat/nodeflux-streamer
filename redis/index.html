@@ -27,41 +27,63 @@
     <div class="container">
         <div class="grid">
             <p>Redis Streamer Client</p>
-            <img id="img" />
+            <img id="redis-img" />
             <!-- <ul id="redis-messages"></ul> -->
         </div>
         <div class="grid">
             <p>RabbitMQ Streamer Client</p>
-            <ul id="rabbitmq-messages"></ul>
+            <img id="rabbit-img" />
         </div>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
         $(() => {
-            const socket = new WebSocket('ws://localhost:8080');
-            const frameImage = document.querySelector('#img');
+            const redisSocket = new WebSocket('ws://localhost:8080');
+            const redisImage = document.querySelector('#redis-img');
 
             // Connection opened
-            socket.addEventListener('open', function (event) {
+            redisSocket.addEventListener('open', function (event) {
                 $('#status').text('Connected')
             });
 
             // Listen for messages
-            socket.addEventListener('message', function (event) {
+            redisSocket.addEventListener('message', function (event) {
                 const msg = event.data;
 
                 // console.log(atob(msg));
                 // console.log(msg);
                 const image = 'data:image/jpeg;base64,' + msg;
                 // console.log(image);
-                frameImage.src = image;
+                redisImage.src = image;
                 // $('#redis-messages').append($('<li>').text(msg));
                 // window.scrollTo(0, document.body.scrol   lHeight);
             });
 
+
+            const rabbitSocket = new WebSocket('ws://localhost:8090');
+            const rabbitImage = document.querySelector('#rabbit-img');
+
+            // Connection opened
+            rabbitSocket.addEventListener('open', function (event) {
+                $('#status').text('Connected')
+            });
+
+            // Listen for messages
+            rabbitSocket.addEventListener('message', function (event) {
+                const msg = event.data;
+
+                // console.log(atob(msg));
+                // console.log(msg);
+                const image = 'data:image/jpeg;base64,' + msg;
+                // console.log(image);
+                rabbitImage.src = image;
+                // $('#rabbit-messages').append($('<li>').text(msg));
+                // window.scrollTo(0, document.body.scrol   lHeight);
+            });
+
             /*
-            socket.on('rabbitmq_frames', function (msg) {
+            socket.on('rabbitmq_rediss', function (msg) {
                 $('#rabbitmq-messages').append($('<li>').text(msg));
                 window.scrollTo(0, document.body.scrollHeight);
             });
