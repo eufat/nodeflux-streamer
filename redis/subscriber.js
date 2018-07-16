@@ -1,10 +1,12 @@
 const app = require("express")();
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+// const io = require("socket.io")(http);
 const redis = require("redis");
 const WebSocket = require("ws");
-const jpeg = require("jpeg-js");
-const inkjet = require("inkjet");
+// const jpeg = require("jpeg-js");
+// const inkjet = require("inkjet");
+
+const writeCSV = require("../utils/csv");
 
 // const sub = redis.createClient();
 

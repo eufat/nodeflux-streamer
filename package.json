@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.2",
+    "csv-write-stream": "^2.0.0",
     "express": "^4.16.3",
     "inkjet": "^2.1.2",
     "jpeg-js": "^0.3.4",

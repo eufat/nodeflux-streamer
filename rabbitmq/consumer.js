@@ -1,6 +1,8 @@
 const amqp = require("amqplib/callback_api");
 const WebSocket = require("ws");
 
+const writeCSV = require("../utils/csv");
+
 const wss = new WebSocket.Server({
     port: 8090
 });
@@ -14,7 +16,7 @@ amqp.connect(
             console.log("Connected with producer.");
 
             wss.on("connection", function connection(ws) {
-                console.log("Connected with client.");
+                // console.log("Connected with client.");
 
                 conn.createChannel(function(err, ch) {
                     const ex = "processed_img";
@@ -31,7 +33,17 @@ amqp.connect(
                         ch.consume(
                             q.queue,
                             function(msg) {
-                                ws.send(msg.content.toString());
+                                const message = msg.content.toString();
+                                const ob = JSON.parse(message);
+
+                                ws.send(ob.data);
+
+                                delete ob["data"];
+                                console.log("Sending frame: ", ob.frame);
+
+                                ob["timestamp"] = new Date().getTime();
+
+                                writeCSV(ob);
                                 // console.log(" [x] %s", msg.content.toString());
                             },
                             { noAck: true }
