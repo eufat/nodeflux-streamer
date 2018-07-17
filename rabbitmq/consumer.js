@@ -8,7 +8,7 @@ const wss = new WebSocket.Server({
 });
 
 amqp.connect(
-    "amqp://52.221.238.228:7002",
+    "amqp://54.169.10.141:7002",
     (err, conn) => {
         if (err) {
             console.log(err);

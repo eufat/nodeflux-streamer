@@ -11,7 +11,7 @@ const writeCSV = require("../utils/csv");
 // const sub = redis.createClient();
 
 const sub = redis.createClient({
-    host: "52.221.238.228",
+    host: "54.169.10.141",
     port: "7001"
 });
 
@@ -44,7 +44,17 @@ wss.on("connection", function connection(ws) {
 
     sub.on("message", (channel, message) => {
         // const jpegData = jpeg.decode(message);
-        ws.send(message);
+
+        const ob = JSON.parse(message);
+
+        ws.send(ob.data);
+
+        delete ob["data"];
+        console.log("Sending frame: ", ob.frame);
+
+        ob["timestamp"] = new Date().getTime();
+
+        writeCSV(ob);
 
         console.log(`From ${channel} sent ${i}`);
         i++;
