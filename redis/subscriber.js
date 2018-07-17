@@ -6,7 +6,8 @@ const WebSocket = require("ws");
 // const jpeg = require("jpeg-js");
 // const inkjet = require("inkjet");
 
-const writeCSV = require("../utils/csv");
+const createCSVWriter = require("../utils/csv");
+const writeCSV = createCSVWriter("redis-subscriber");
 
 // const sub = redis.createClient();
 

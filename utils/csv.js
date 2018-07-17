@@ -8,4 +8,13 @@ function writeCSV(data) {
     writer.end();
 }
 
-module.exports = writeCSV;
+const createCSVWriter = type => {
+    return data => {
+        const writer = csvWriter();
+        writer.pipe(fs.createWriteStream(`${type}.csv`, { flags: "a" }));
+        writer.write(data);
+        writer.end();
+    };
+};
+
+module.exports = createCSVWriter;

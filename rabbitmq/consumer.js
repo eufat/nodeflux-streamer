@@ -1,7 +1,8 @@
 const amqp = require("amqplib/callback_api");
 const WebSocket = require("ws");
 
-const writeCSV = require("../utils/csv");
+const createCSVWriter = require("../utils/csv");
+const writeCSV = createCSVWriter("rabbitmq-consumer");
 
 const wss = new WebSocket.Server({
     port: 8090
