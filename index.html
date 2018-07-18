@@ -39,7 +39,7 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
         $(() => {
-            const redisSocket = new WebSocket('ws://localhost:8080');
+            const redisSocket = new WebSocket('ws://54.169.148.235:8080');
             const redisImage = document.querySelector('#redis-img');
 
             // Connection opened
@@ -61,7 +61,7 @@
             });
 
 
-            const rabbitSocket = new WebSocket('ws://localhost:8090');
+            const rabbitSocket = new WebSocket('ws://54.169.148.235:8090');
             const rabbitImage = document.querySelector('#rabbit-img');
 
             // Connection opened
